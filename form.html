@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JJITA - Registration Form</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .registration-form-wrapper {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: white;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            appearance: none;
+            cursor: pointer;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: calc(100% - 1rem) center;
+            padding-right: 2.5rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-group select option {
+            background: #1e3a8a;
+            color: white;
+            padding: 0.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .photo-upload {
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .photo-upload i {
+            font-size: 2rem;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+        }
+
+        .form-submit {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }        .upload-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin: 1rem auto;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .upload-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Enhanced Photo Upload Styles */
+        .photo-upload {
+            position: relative;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .photo-upload:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .photo-upload.dragover {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+            transform: scale(1.02);
+        }
+
+        .photo-upload .upload-content {
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload .upload-icon {
+            font-size: 3rem;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .photo-upload:hover .upload-icon {
+            transform: scale(1.1);
+            color: #60a5fa;
+        }
+
+        .photo-upload .upload-text {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .photo-upload .upload-hint {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+        }
+
+        .photo-upload .upload-preview-container {
+            position: relative;
+            margin: 1rem auto;
+            max-width: 200px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .photo-upload .upload-preview-container img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+
+        .photo-upload .remove-photo {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .photo-upload .remove-photo:hover {
+            background: #ef4444;
+            transform: scale(1.1);
+        }
+
+        .photo-upload .file-info {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.9);
+            display: none;
+        }
+
+        .photo-upload .file-info .file-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .photo-upload .file-info .file-size {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Validation states for photo upload */
+        .form-group.error .photo-upload {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .form-group.success .photo-upload {
+            border-color: #22c55e;
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .form-group.error .photo-upload .upload-icon {
+            color: #ef4444;
+        }
+
+        .form-group.success .photo-upload .upload-icon {
+            color: #22c55e;
+        }
+
+        /* Custom Alert Styles */
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            max-width: 400px;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .custom-alert.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .custom-alert.success {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .custom-alert.error {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .custom-alert.warning {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .custom-alert .alert-icon {
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .custom-alert.success .alert-icon {
+            color: #22c55e;
+        }
+
+        .custom-alert.error .alert-icon {
+            color: #ef4444;
+        }
+
+        .custom-alert.warning .alert-icon {
+            color: #f59e0b;
+        }
+
+        .custom-alert .alert-content {
+            flex: 1;
+        }
+
+        .custom-alert .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .custom-alert .alert-message {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .custom-alert .alert-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.25rem;
+            padding: 0;
+            margin-left: 0.5rem;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .custom-alert .alert-close:hover {
+            opacity: 1;
+        }
+
+        /* Form validation styles */
+        .form-group.error input,
+        .form-group.error select {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+        }
+
+        .form-group.success input,
+        .form-group.success select {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+        }
+
+        .field-error {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }        .form-group.error .field-error {
+            display: block;
+        }        /* Back Button Styles */
+        .back-button {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            font-size: 1.25rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            transform: translateX(-5px) scale(1.1);
+            color: #60a5fa;
+            text-decoration: none;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .back-button:active {
+            transform: translateX(-3px) scale(1.05);
+            transition: all 0.1s ease;
+        }
+
+        .back-button i {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .back-button:hover i {
+            transform: translateX(-2px);
+        }
+
+        /* Add ripple effect */
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .back-button:hover::before {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .back-button {
+                top: 1rem;
+                left: 1rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <a href="index.html" class="back-button" title="Back to Home">
+            <i class="fas fa-arrow-left"></i>
+        </a>
+
+        <div class="section-header">
+            <h2 class="section-title">JJITA Membership Registration</h2>
+            <p class="section-description">Join our growing community of IT professionals in Jalgoan</p>
+        </div>
+
+        <div class="registration-form-wrapper">
+            <form id="registrationForm">                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Full Name*</label>
+                        <input type="text" id="name" required>
+                        <div class="field-error" id="name-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="firmName">Firm Name*</label>
+                        <input type="text" id="firmName" required>
+                        <div class="field-error" id="firmName-error"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Business Address*</label>
+                    <input type="text" id="address" required>
+                    <div class="field-error" id="address-error"></div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="phone">Phone Number*</label>
+                        <input type="tel" id="phone" pattern="[0-9]{10}" required>
+                        <div class="field-error" id="phone-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address*</label>
+                        <input type="email" id="email" required>
+                        <div class="field-error" id="email-error"></div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="gender">Gender*</label>
+                        <select id="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                            <option value="Prefer not to say">Prefer not to say</option>
+                        </select>
+                        <div class="field-error" id="gender-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodGroup">Blood Group*</label>
+                        <select id="bloodGroup" required>
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <div class="field-error" id="bloodGroup-error"></div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="tshirtSize">T-Shirt Size*</label>
+                        <select id="tshirtSize" required>
+                            <option value="">Select Size</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                            <option value="XXXL">XXXL</option>
+                        </select>
+                        <div class="field-error" id="tshirtSize-error"></div>
+                    </div>
+                    <div class="form-group">
+                        <!-- Empty slot for better layout balance -->
+                    </div>
+                </div>                <div class="form-group">
+                    <label for="photo">Photo Upload*</label>
+                    <div class="photo-upload" id="photoUploadArea">
+                        <div class="upload-content" id="uploadContent">
+                            <div class="upload-icon">
+                                <i class="fas fa-camera"></i>
+                            </div>
+                            <div class="upload-text">
+                                <strong>Click to upload</strong> or drag and drop
+                            </div>
+                            <div class="upload-hint">
+                                PNG, JPG up to 2MB • Minimum 300x300px
+                            </div>
+                        </div>
+                        
+                        <div class="upload-preview-container" id="uploadPreviewContainer">
+                            <img id="photoPreview" alt="Preview">
+                            <button type="button" class="remove-photo" id="removePhoto">×</button>
+                        </div>
+                        
+                        <div class="file-info" id="fileInfo">
+                            <div class="file-name" id="fileName"></div>
+                            <div class="file-size" id="fileSize"></div>
+                        </div>
+                        
+                        <input type="file" id="photoInput" hidden accept="image/*" required>
+                    </div>
+                    <div class="field-error" id="photo-error"></div>
+                </div>
+
+                <div class="form-submit">
+                    <button type="submit" class="btn btn-primary btn-large">
+                        Submit Registration
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>    </div>
+
+    <!-- Custom Alert Container -->
+    <div id="alert-container"></div>    <script>
+        // Custom Alert System
+        function showAlert(type, title, message, duration = 5000) {
+            const alertContainer = document.getElementById('alert-container');
+            
+            // Create alert element
+            const alert = document.createElement('div');
+            alert.className = `custom-alert ${type}`;
+            
+            // Icon mapping
+            const icons = {
+                success: '✓',
+                error: '✕',
+                warning: '⚠'
+            };
+            
+            alert.innerHTML = `
+                <div class="alert-icon">${icons[type] || '!'}</div>
+                <div class="alert-content">
+                    <div class="alert-title">${title}</div>
+                    <div class="alert-message">${message}</div>
+                </div>
+                <button class="alert-close" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            // Add to container
+            alertContainer.appendChild(alert);
+            
+            // Show with animation
+            setTimeout(() => alert.classList.add('show'), 100);
+            
+            // Auto remove
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 300);
+            }, duration);
+        }
+
+        // Form Validation Functions
+        function validateField(fieldId, validationFn, errorMessage) {
+            const field = document.getElementById(fieldId);
+            const formGroup = field.closest('.form-group');
+            const errorDiv = document.getElementById(`${fieldId}-error`);
+            
+            const isValid = validationFn(field.value);
+            
+            if (isValid) {
+                formGroup.classList.remove('error');
+                formGroup.classList.add('success');
+                errorDiv.textContent = '';
+            } else {
+                formGroup.classList.remove('success');
+                formGroup.classList.add('error');
+                errorDiv.textContent = errorMessage;
+            }
+            
+            return isValid;
+        }
+
+        function validateName(value) {
+            return value.trim().length >= 2;
+        }
+
+        function validateFirmName(value) {
+            return value.trim().length >= 2;
+        }
+
+        function validateAddress(value) {
+            return value.trim().length >= 10;
+        }
+
+        function validatePhone(value) {
+            const phoneRegex = /^[0-9]{10}$/;
+            return phoneRegex.test(value.replace(/\s/g, ''));
+        }
+
+        function validateEmail(value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(value);
+        }
+
+        function validateSelect(value) {
+            return value !== '';
+        }        function validatePhoto() {
+            const photoInput = document.getElementById('photoInput');
+            const file = photoInput.files[0];
+            
+            if (!file) {
+                return false;
+            }
+            
+            // Check file size (2MB = 2097152 bytes)
+            if (file.size > 2097152) {
+                showAlert('error', 'File Too Large', 'Photo size must be less than 2MB');
+                return false;
+            }
+            
+            // Check file type
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                showAlert('error', 'Invalid File Type', 'Please upload a JPG, PNG, or WebP image');
+                return false;
+            }
+            
+            return true;
+        }
+
+        // Enhanced photo validation with image dimensions
+        function validatePhotoAdvanced(file) {
+            return new Promise((resolve) => {
+                // Basic validations
+                if (!file) {
+                    resolve({ valid: false, error: 'Please select a photo' });
+                    return;
+                }
+                
+                // File size check (2MB)
+                if (file.size > 2097152) {
+                    resolve({ valid: false, error: 'File size must be less than 2MB' });
+                    return;
+                }
+                
+                // File type check
+                const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+                if (!allowedTypes.includes(file.type)) {
+                    resolve({ valid: false, error: 'Please upload a JPG, PNG, or WebP image' });
+                    return;
+                }
+                
+                // Check image dimensions
+                const img = new Image();
+                img.onload = function() {
+                    if (this.width < 300 || this.height < 300) {
+                        resolve({ valid: false, error: 'Image must be at least 300x300 pixels' });
+                    } else {
+                        resolve({ valid: true });
+                    }
+                };
+                img.onerror = function() {
+                    resolve({ valid: false, error: 'Invalid image file' });
+                };
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // Format file size for display
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Real-time validation
+        function setupRealTimeValidation() {
+            const validations = [
+                { id: 'name', fn: validateName, msg: 'Name must be at least 2 characters long' },
+                { id: 'firmName', fn: validateFirmName, msg: 'Firm name must be at least 2 characters long' },
+                { id: 'address', fn: validateAddress, msg: 'Address must be at least 10 characters long' },
+                { id: 'phone', fn: validatePhone, msg: 'Phone number must be 10 digits' },
+                { id: 'email', fn: validateEmail, msg: 'Please enter a valid email address' },
+                { id: 'gender', fn: validateSelect, msg: 'Please select your gender' },
+                { id: 'bloodGroup', fn: validateSelect, msg: 'Please select your blood group' },
+                { id: 'tshirtSize', fn: validateSelect, msg: 'Please select your t-shirt size' }
+            ];
+
+            validations.forEach(({ id, fn, msg }) => {
+                const field = document.getElementById(id);
+                
+                field.addEventListener('blur', () => {
+                    validateField(id, fn, msg);
+                });
+                
+                field.addEventListener('input', () => {
+                    const formGroup = field.closest('.form-group');
+                    if (formGroup.classList.contains('error')) {
+                        validateField(id, fn, msg);
+                    }
+                });
+            });
+        }        // Enhanced photo preview functionality with drag and drop
+        const photoInput = document.getElementById('photoInput');
+        const photoUploadArea = document.getElementById('photoUploadArea');
+        const uploadContent = document.getElementById('uploadContent');
+        const uploadPreviewContainer = document.getElementById('uploadPreviewContainer');
+        const photoPreview = document.getElementById('photoPreview');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const fileSize = document.getElementById('fileSize');
+        const removePhoto = document.getElementById('removePhoto');
+
+        // Click to upload
+        photoUploadArea.addEventListener('click', (e) => {
+            if (e.target !== removePhoto) {
+                photoInput.click();
+            }
+        });
+
+        // Drag and drop functionality
+        photoUploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            photoUploadArea.classList.add('dragover');
+        });
+
+        photoUploadArea.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            photoUploadArea.classList.remove('dragover');
+        });
+
+        photoUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            photoUploadArea.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelection(files[0]);
+            }
+        });
+
+        // File input change handler
+        photoInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileSelection(file);
+            }
+        });
+
+        // Handle file selection and validation
+        async function handleFileSelection(file) {
+            const formGroup = photoUploadArea.closest('.form-group');
+            const errorDiv = document.getElementById('photo-error');
+            
+            // Reset states
+            formGroup.classList.remove('error', 'success');
+            errorDiv.textContent = '';
+            
+            // Validate file
+            const validation = await validatePhotoAdvanced(file);
+            
+            if (!validation.valid) {
+                formGroup.classList.add('error');
+                errorDiv.textContent = validation.error;
+                showAlert('error', 'Upload Failed', validation.error);
+                resetPhotoUpload();
+                return;
+            }
+            
+            // File is valid - show preview
+            formGroup.classList.add('success');
+            
+            // Update file input
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            photoInput.files = dt.files;
+            
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                photoPreview.src = e.target.result;
+                uploadContent.style.display = 'none';
+                uploadPreviewContainer.style.display = 'block';
+                fileInfo.style.display = 'block';
+                
+                // Update file info
+                fileName.textContent = file.name;
+                fileSize.textContent = formatFileSize(file.size);
+                
+                showAlert('success', 'Photo Uploaded', 'Your photo has been successfully uploaded!');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Remove photo functionality
+        removePhoto.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetPhotoUpload();
+        });
+
+        function resetPhotoUpload() {
+            const formGroup = photoUploadArea.closest('.form-group');
+            
+            // Reset file input
+            photoInput.value = '';
+            
+            // Reset UI
+            uploadContent.style.display = 'block';
+            uploadPreviewContainer.style.display = 'none';
+            fileInfo.style.display = 'none';
+            
+            // Reset validation states
+            formGroup.classList.remove('error', 'success');
+            document.getElementById('photo-error').textContent = '';
+        }        // Form submission
+        document.getElementById('registrationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate all fields
+            let isFormValid = true;
+            const validations = [
+                { id: 'name', fn: validateName, msg: 'Name must be at least 2 characters long' },
+                { id: 'firmName', fn: validateFirmName, msg: 'Firm name must be at least 2 characters long' },
+                { id: 'address', fn: validateAddress, msg: 'Address must be at least 10 characters long' },
+                { id: 'phone', fn: validatePhone, msg: 'Phone number must be 10 digits' },
+                { id: 'email', fn: validateEmail, msg: 'Please enter a valid email address' },
+                { id: 'gender', fn: validateSelect, msg: 'Please select your gender' },
+                { id: 'bloodGroup', fn: validateSelect, msg: 'Please select your blood group' },
+                { id: 'tshirtSize', fn: validateSelect, msg: 'Please select your t-shirt size' }
+            ];
+            
+            // Validate each field
+            validations.forEach(({ id, fn, msg }) => {
+                if (!validateField(id, fn, msg)) {
+                    isFormValid = false;
+                }
+            });
+            
+            // Validate photo with enhanced validation
+            const photoFile = photoInput.files[0];
+            const photoValidation = await validatePhotoAdvanced(photoFile);
+            const formGroup = photoUploadArea.closest('.form-group');
+            const errorDiv = document.getElementById('photo-error');
+            
+            if (!photoValidation.valid) {
+                formGroup.classList.add('error');
+                errorDiv.textContent = photoValidation.error;
+                isFormValid = false;
+            } else {
+                formGroup.classList.remove('error');
+                formGroup.classList.add('success');
+                errorDiv.textContent = '';
+            }
+            
+            if (isFormValid) {
+                // Show loading state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+                submitBtn.disabled = true;
+                
+                // Simulate form submission delay
+                setTimeout(() => {
+                    showAlert('success', 'Registration Successful!', 'Your membership application has been submitted successfully. We will contact you soon.');
+                    
+                    // Reset form after successful submission
+                    setTimeout(() => {
+                        this.reset();
+                        resetPhotoUpload();
+                        // Reset all form group classes
+                        document.querySelectorAll('.form-group').forEach(group => {
+                            group.classList.remove('success', 'error');
+                        });
+                        
+                        // Reset submit button
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 2000);
+                }, 1500);
+            } else {
+                showAlert('error', 'Validation Error', 'Please fix the errors in the form before submitting.');
+                
+                // Scroll to first error
+                const firstError = document.querySelector('.form-group.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        });
+
+        // Initialize real-time validation
+        document.addEventListener('DOMContentLoaded', setupRealTimeValidation);
+    </script>
+</body>
+</html>
