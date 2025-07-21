@@ -1,6 +1,6 @@
 # Association Landing Page
 
-![Landing Page Screenshot](assets/screenshot.png)
+![Landing Page Screenshot](/image.png)
 
 ## Overview
 
